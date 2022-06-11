@@ -132,6 +132,9 @@ export const App: FC = () => {
         <Typography textAlign='center'>
           あなただけの特別な NFT を Mint しよう💫
         </Typography>
+        <Typography textAlign='center'>
+          MetamaskのRinkebyと接続することでNFTをMintできるようになります
+        </Typography>
         {currentAccount === "" ? (
           <Button
             onClick={connectWallet}
