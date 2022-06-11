@@ -1,0 +1,9 @@
+{
+  "name": "contract",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "devDependencies": {
+    "hardhat": "^2.9.9"
+  }
+}
