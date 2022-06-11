@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react"
 import { ethers } from "ethers";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Link, Stack, Typography } from "@mui/material";
 
 import { Ethereum } from './types/Ethereum';
 import genNFT from './utils/genNFT.json';
@@ -14,6 +14,8 @@ declare global {
 export const App: FC = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   console.log("currentAccount: ", currentAccount);
+
+  const [waitMining, setWaitMining] = useState(false);
 
   const checkIfWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -41,6 +43,7 @@ export const App: FC = () => {
     try {
       const { ethereum } = window;
       if (ethereum) {
+        setWaitMining(true);
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const connectedContract = new ethers.Contract(
@@ -53,6 +56,7 @@ export const App: FC = () => {
         console.log("Mining...please wait.");
         await nftTxn.wait();
 
+        setWaitMining(false);
         console.log(
           `Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`
         );
@@ -88,6 +92,35 @@ export const App: FC = () => {
           >
             Connect Your Wallet
           </Button>
+          ) : mintButton({waitMining,askContractToMintNft})
+        }
+        <Box padding={35}/>
+        <Button
+          href="https://testnets.opensea.io/account"
+          sx={{
+            background: '-webkit-linear-gradient(left, #60c657 30%, #35aee2 90%)'
+          }}
+        >
+          OpenSeaで確認する
+        </Button>
+      </Stack>
+    </Box>
+  )
+}
+
+type ButtonProps ={
+  waitMining: boolean;
+  askContractToMintNft: () => Promise<void>;
+}
+const mintButton: FC<ButtonProps> = ({ waitMining, askContractToMintNft }) => {
+  console.log(waitMining)
+  return (
+    <>
+      {
+        waitMining ? (
+          <Button>
+            waiting....
+          </Button>
         ) : (
           <Button
             sx={{
@@ -97,8 +130,8 @@ export const App: FC = () => {
           >
             Mint NFT
           </Button>
-        )}
-      </Stack>
-    </Box>
+        )
+      }
+    </>
   )
 }
