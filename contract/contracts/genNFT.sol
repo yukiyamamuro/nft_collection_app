@@ -18,6 +18,8 @@ contract genNFT is ERC721URIStorage {
   string[] secondWords = ["must be", "may be", "should be"];
   string[] thirdWords = ["decrease", "increase", "null", "full"];
 
+  event NewPowerControllNFTMinted(address sender, uint256 tokenId);
+
   constructor() ERC721 ("PowerControllNFT", "POWERCONTROLL") {
     console.log("This is my NFT contract.");
   }
@@ -83,5 +85,6 @@ contract genNFT is ERC721URIStorage {
     console.log("An NFT w/ ID %s has been minted to %s", newItemId, msg.sender);
 
     _tokenIds.increment();
+    emit NewPowerControllNFTMinted(msg.sender, newItemId);
   }
 }
